@@ -24,11 +24,8 @@ mo = am/(am+bm);
 no = an/(an+bn);
 ho = ah/(ah+bh);
 
-I = 0;
-INa = (mo^3)*gNa*ho*(Vm-ENa);
-IK = (no^4)*gK*(Vm-EK);
-IL = gL*(Vm-EL);
-Iion = I - INa - IK - IL;
+INa = (mo^3)*gNa*h*(Vm-ENa);
+IK = 
 
 
 
