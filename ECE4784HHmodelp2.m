@@ -1,5 +1,7 @@
+clc;
+clear;
 % Initialize Time
-stepsize = 1/100; %Stepsize must be greater than 1/2 to accomidate the 0.5ms step 
+stepsize = 1/100000; %Stepsize must be greater than 1/2 to accomidate the 0.5ms step 
 t = [0:stepsize:100]; %Time
 
 stimuli = (length(t)-1)/200;
@@ -43,9 +45,9 @@ gK(1) = (n((1))^4)*gKcon;
 %Vm(1) = (Iion/Cm);
 
 for i = 2:length(t)
-    m(i) = m(i-1)+stepsize*((am*(1-m(i-1)))-(bm*m(i-1)));
-    n(i) = n(i-1)+stepsize*((an*(1-n(i-1)))-(bn*n(i-1)));
-    h(i) = h(i-1)+stepsize*((ah*(1-h(i-1)))-(bh*h(i-1)));
+    m(i) = m(i-1)+(stepsize*((am*(1-m(i-1)))-(bm*m(i-1))));
+    n(i) = n(i-1)+(stepsize*((an*(1-n(i-1)))-(bn*n(i-1))));
+    h(i) = h(i-1)+(stepsize*((ah*(1-h(i-1)))-(bh*h(i-1))));
     
     gNa(i) = ((m(i-1))^3)*gNacon*h(i-1);
     gK(i) = (n((i-1))^4)*gKcon; 
@@ -54,21 +56,23 @@ for i = 2:length(t)
     INa = ((m(i-1))^3)*gNacon*h(i-1)*(Vm(i-1)-ENa);
     IK = (n((i-1))^4)*gKcon*(Vm(i-1)-EK);
     IL = gL*(Vm(i-1)-EL);
-    I = 0; % Reinitialize
+    I = 0;
     
     %Stimulated
     if(i>10)
         if(xs<stimuli)
             I = 5;
-            xs = xs+1;
+            xs = xs+1
+        else 
+            I = 0;
         end
     end
     
     
-    Iion(i) = I - INa - IK - IL;
+    Iion(i) = 5 - INa - IK - IL;
     
    % if(Iion(i) == Iion(i-1)) 
-        dVm = 0;
+        %dVm = 0;
    % else
         dVm = (Iion(i)/Cm)*stepsize;
     %end

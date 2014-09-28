@@ -1,6 +1,8 @@
+clc;
+clear;
 % Initialize Time
 stepsize = 1/100;
-t = [0:stepsize:1000]; %Time
+t = [0:stepsize:100]; %Time
 
 % Constants
 gKcon = 36; %mS/cm^2
@@ -45,8 +47,7 @@ for i = 2:length(t)
     h(i) = h(i-1)+stepsize*((ah*(1-h(i-1)))-(bh*h(i-1)));
     
     gNa(i) = ((m(i-1))^3)*gNacon*h(i-1);
-    gK(i) = (n((i-1))^4)*gKcon; 
-    
+    gK(i) = (n((i-1))^4)*gKcon;  
     
     INa = ((m(i-1))^3)*gNacon*h(i-1)*(Vm(i-1)-ENa);
     IK = (n((i-1))^4)*gKcon*(Vm(i-1)-EK);
@@ -55,7 +56,7 @@ for i = 2:length(t)
     Iion(i) = I - INa - IK - IL;
     
    % if(Iion(i) == Iion(i-1)) 
-        dVm = 0;
+        %dVm = 0;
     %else
         dVm = (Iion(i)/Cm)*stepsize;
    % end
