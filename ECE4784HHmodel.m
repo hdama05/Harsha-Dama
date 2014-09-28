@@ -1,5 +1,5 @@
 % Initialize Time
-stepsize = 1;
+stepsize = 1/100;
 t = [0:stepsize:100]; %Time
 
 % Constants
@@ -13,7 +13,7 @@ Vrest = -70; %mV
 Cm = 1; %uF/cm^2
 
 % Initial Conditions
-Vm =ones(1,length(t)).*Vrest;
+Vm =ones(1,length(t)).*0;
 am = 0.1*((25-Vrest)/(exp((25-Vrest)/10)-1));
 bm = 4*exp(-1*Vrest/18);
 an = 0.01*((10-Vrest)/(exp((10-Vrest)/10)-1));
@@ -26,10 +26,10 @@ no = an/(an+bn);
 ho = ah/(ah+bh);
 
 I = 0; %Injected current
-INa = (mo^3)*gNa*ho*(Vrest-ENa);
-IK = (no^4)*gK*(Vrest-EK);
-IL = gL*(Vrest-EL);
-Iion = I - INa - IK - IL;
+%INa = (mo^3)*gNa*ho*(Vrest-ENa);
+%IK = (no^4)*gK*(Vrest-EK);
+%IL = gL*(Vrest-EL);
+%Iion = I - INa - IK - IL;
 
 m(1) = mo;
 n(1) = no;
@@ -38,30 +38,27 @@ h(1) = ho;
 %Vm(1) = (Iion/Cm);
 
 for i = 2:length(t)
-    m(i) = (am*(1-m(i-1)))-(bm*m(i-1));
-    n(i) = (an*(1-n(i-1)))-(bn*n(i-1));
-    h(i) = (ah*(1-h(i-1)))-(bh*h(i-1));
+    m(i) = m(i-1)+stepsize*((am*(1-m(i-1)))-(bm*m(i-1)));
+    n(i) = n(i-1)+stepsize*((an*(1-n(i-1)))-(bn*n(i-1)));
+    h(i) = h(i-1)+stepsize*((ah*(1-h(i-1)))-(bh*h(i-1)));
     
-    INa = ((m(i))^3)*gNa*h(i)*(Vrest-ENa);
-    IK = (n((i))^4)*gK*(Vrest-EK);
+    INa = ((m(i-1))^3)*gNa*h(i-1)*(Vrest-ENa);
+    IK = (n((i-1))^4)*gK*(Vrest-EK);
+    IL = gL*(Vrest-EL);
     
-    IL = 0;%gL*(Vrest-EL);
+    Iion(i) = I - INa - IK - IL;
     
-    Iion = I - INa - IK - IL;
-    dVm = (Iion/Cm)*stepsize;
+    if(Iion(i) == Iion(i-1)) 
+        dVm = 0;
+    else
+        dVm = (Iion(i)/Cm)*stepsize;
+    end
+    
     Vm(i) = Vm(i-1)+(dVm);
-    
-    
-    
+       
 end
-plot(t,Vm)
 
-
-
-
-
-
-
-
+Vmm = Vm+ones(1,length(t))*-70;
+plot(t,Vmm)
 
 
