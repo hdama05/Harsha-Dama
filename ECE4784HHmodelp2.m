@@ -1,6 +1,9 @@
 % Initialize Time
-stepsize = 1/100;
-t = [0:stepsize:1000]; %Time
+stepsize = 1/100; %Stepsize must be greater than 1/2 to accomidate the 0.5ms step 
+t = [0:stepsize:100]; %Time
+
+stimuli = (length(t)-1)/200;
+xs = 0;
 
 % Constants
 gKcon = 36; %mS/cm^2
@@ -51,14 +54,24 @@ for i = 2:length(t)
     INa = ((m(i-1))^3)*gNacon*h(i-1)*(Vm(i-1)-ENa);
     IK = (n((i-1))^4)*gKcon*(Vm(i-1)-EK);
     IL = gL*(Vm(i-1)-EL);
+    I = 0; % Reinitialize
+    
+    %Stimulated
+    if(i>10)
+        if(xs<stimuli)
+            I = 5;
+            xs = xs+1;
+        end
+    end
+    
     
     Iion(i) = I - INa - IK - IL;
     
    % if(Iion(i) == Iion(i-1)) 
         dVm = 0;
-    %else
+   % else
         dVm = (Iion(i)/Cm)*stepsize;
-   % end
+    %end
     
     Vm(i) = Vm(i-1)+(dVm);
        
@@ -67,8 +80,8 @@ end
 Vmm = Vm+ones(1,length(t))*-70;
 figure
 plot(t,Vmm)
-figure
-plot(t,gNa,'r')
-figure
-plot(t,gK,'b')
+%figure
+%plot(t,gNa,'r')
+%figure
+%plot(t,gK,'b')
 
