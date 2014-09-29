@@ -1,7 +1,7 @@
 clc;
 clear;
 % Initialize Time
-stepsize = 1/1000; %Stepsize must be greater than 1/2 to accomidate the 0.5ms step
+stepsize = 1/50000; %Stepsize must be greater than 1/2 to accomidate the 0.5ms step
 t = [0:stepsize:100]; %Time
 
 stimuli = (length(t)-1)/200;
@@ -14,7 +14,7 @@ gL = 0.3; %mS/cm^2
 EK = -12; %mS/cm^2
 ENa = 115; %mV
 EL = 10.6; %mV
-Vrest = 0; %mV
+Vrest = -70; %mV
 Cm = 1; %uF/cm^2
 
 % Initial Conditions
@@ -36,7 +36,7 @@ n(1) = no;
 h(1) = ho;
 gNa(1) = ((m(1))^3)*gNacon*h(1);
 gK(1) = (n((1))^4)*gKcon;
-
+Vm(1) = 0;
 
 %Vm(1) = (Iion/Cm);
 
@@ -62,19 +62,17 @@ for i = 2:length(t)
     I = 0;
     
     %Stimulated
-    if(i>30)
+    if(i>20)
         if(xs<stimuli)
-            Ii(i) = 5;
+            I = 5;
             xs = xs+1;
         else
-            Ii(i) = 0;
+            I = 0;
         end
-    else
-        Ii(i) = 0;
     end
     
     
-    Iion(i) = 5 - INa - IK - IL;
+    Iion(i) = I - INa - IK - IL;
     
     % if(Iion(i) == Iion(i-1))
     %dVm = 0;
@@ -91,6 +89,6 @@ figure
 plot(t,Vmm)
 figure
 plot(t,gNa,'r')
-hold on
+figure
 plot(t,gK,'b')
 

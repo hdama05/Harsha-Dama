@@ -1,7 +1,7 @@
 clc;
 clear;
 % Initialize Time
-stepsize = 1/10000;
+stepsize = 1/100000;
 t = [0:stepsize:100]; %Time
 
 % Constants
@@ -11,8 +11,7 @@ gL = 0.3; %mS/cm^2
 EK = -12; %mS/cm^2
 ENa = 115; %mV
 EL = 10.6; %mV
-Vrest = 0; %mV Original -70mV, but this will be corrected at the end.
-           %Simplification method based on Piazza comment.
+Vrest = -70; %mV
 Cm = 1; %uF/cm^2
 
 % Initial Conditions
@@ -42,7 +41,7 @@ n(1) = no;
 h(1) = ho;
 gNa(1) = ((m(1))^3)*gNacon*h(1);
 gK(1) = (n((1))^4)*gKcon;
-%Vm(1) = -70;
+Vm(1) = -70;
 
 %Vm(1) = (Iion/Cm);
 
