@@ -1,7 +1,7 @@
 clc;
 clear;
 % Initialize Time
-stepsize = 1/1000; % This is the step size taken to get from 0 to 100
+stepsize = 1/500; % This is the step size taken to get from 0 to 100
 t = [0:stepsize:100]; %Time
 
 stimuli = ((length(t)-1)/200);% This is the length of the stimuli which is 
@@ -77,7 +77,7 @@ for i = 2:length(t)
     % voltage and/or probability values
     
     %Stimulated
-    if(i>(length(t)-1)*0.1) % starts at 10% of time
+    if(i>(length(t)-1)*0.2) % starts at 10% of time
         if(xs<stimuli)% stimuli is calculated above 
             Ii(i) = 5;% Injection current equals 5 if conditions are correct
             xs = xs+1;
@@ -89,7 +89,7 @@ for i = 2:length(t)
     end
     
 
-    Iion(i) = I - INa - IK - IL;
+    Iion(i) = Ii(i) - INa - IK - IL;
     % Total currect found as a summation
     
     dVm = (Iion(i)/Cm)*stepsize;
@@ -108,7 +108,7 @@ Vmm = Vm + ones(1,length(t))*-70;
 % Plots
 figure
 plot(t,Vmm)
-axis([0 100 -75 -65])
+%axis([0 100 -75 -65])
 title('Membrane Potential')
 xlabel('Time (ms)')
 ylabel('Voltage (mV)')
@@ -118,7 +118,7 @@ figure
 plot(t,gNa,'r')
 hold on
 plot(t,gK,'b')
-axis([0 100 0 1])
+%axis([0 100 0 1])
 title('gNa and gK')
 xlabel('Time (ms)')
 ylabel('Conductance (S/cm^2)')

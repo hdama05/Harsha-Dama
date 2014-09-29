@@ -2,6 +2,7 @@ clc;
 clear;
 % Initialize Time
 stepsize = 1/1000; % This is the step size taken to get from 0 to 100
+                   % It seems any stepsize smaller than 1/100 will work
 t = [0:stepsize:100]; %Time
 
 stimuli = ((length(t)-1)/200);% This is the length of the stimuli which is 
@@ -37,7 +38,7 @@ no = an/(an+bn);
 ho = ah/(ah+bh);
 % Calculates the initial probabilities m,n, and h
 
-I = 0; %Injected current initialized to zero
+Ii = zeros(1,length(t)); %Injected current initialized to zero
 
 m(1) = mo;
 n(1) = no;
@@ -89,7 +90,7 @@ for i = 2:length(t)
     end
     
 
-    Iion(i) = I - INa - IK - IL;
+    Iion(i) = Ii(i) - INa - IK - IL;
     % Total currect found as a summation
     
     dVm = (Iion(i)/Cm)*stepsize;

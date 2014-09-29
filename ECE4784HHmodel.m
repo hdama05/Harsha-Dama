@@ -2,6 +2,7 @@ clc;
 clear;
 % Initialize Time
 stepsize = 1/1000; % This is the step size taken to get from 0 to 100
+                   % It seems any stepsize smaller than 1/100 will work
 t = [0:stepsize:100]; %Time
 
 % Constants
