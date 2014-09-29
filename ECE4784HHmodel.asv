@@ -1,7 +1,7 @@
 clc;
 clear;
 % Initialize Time
-stepsize = 1/1000; % This is the step size taken to get from 0 to 100
+stepsize = 1/10000; % This is the step size taken to get from 0 to 100
 t = [0:stepsize:100]; %Time
 
 % Constants
@@ -75,7 +75,7 @@ for i = 2:length(t)
         % Total currect found as a summation
     
     dVm = (Iion(i)/Cm)*stepsize;
-        % Derivative equation for voltage scaled be step size "time".
+        % Derivative equation for voltage
     
     Vm(i) = Vm(i-1)+(dVm);
         % New voltage calculation based off previous value and derivative
@@ -83,25 +83,11 @@ for i = 2:length(t)
 end
 
 Vmm = Vm + ones(1,length(t))*-70;
-    % Each of the voltage values in the vector have the resting voltage of 
-    % -70 added back to them since the initial value started a 0 instead of
-    % -70mV.
-    
-% Plots    
-figure
-plot(t,Vmm)
-axis([0 100 -75 -65])
-title('Membrane Potential')
-xlabel('Time (ms)')
-ylabel('Voltage (mV)')
-legend('Voltage')
 
 figure
+plot(t,Vmm)
+figure
 plot(t,gNa,'r')
-hold on
+figure
 plot(t,gK,'b')
-axis([0 100 0 1])
-title('gNa and gK')
-xlabel('Time (ms)')
-ylabel('Conductance (S/cm^2)')
-legend('gNa','gK')
+
