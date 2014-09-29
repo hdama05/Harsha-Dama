@@ -1,7 +1,7 @@
 clc;
 clear;
 % Initialize Time
-stepsize = 1/100;
+stepsize = 1/10000;
 t = [0:stepsize:100]; %Time
 
 % Constants
@@ -15,11 +15,14 @@ Vrest = -70; %mV
 Cm = 1; %uF/cm^2
 
 % Initial Conditions
-Vm =ones(1,length(t)).*0;
+Vm = ones(1,length(t)).*0;
+
 am = 0.1*((25-Vrest)/(exp((25-Vrest)/10)-1));
 bm = 4*exp(-1*Vrest/18);
+
 an = 0.01*((10-Vrest)/(exp((10-Vrest)/10)-1));
 bn = 0.125*exp(-1*Vrest/80);
+
 ah = 0.07*exp(-1*Vrest/20);
 bh = 1/(exp((30-Vrest)/10)+1);
 
@@ -39,12 +42,21 @@ h(1) = ho;
 gNa(1) = ((m(1))^3)*gNacon*h(1);
 gK(1) = (n((1))^4)*gKcon; 
 
+
 %Vm(1) = (Iion/Cm);
 
 for i = 2:length(t)
-    m(i) = m(i-1)+stepsize*((am*(1-m(i-1)))-(bm*m(i-1)));
-    n(i) = n(i-1)+stepsize*((an*(1-n(i-1)))-(bn*n(i-1)));
-    h(i) = h(i-1)+stepsize*((ah*(1-h(i-1)))-(bh*h(i-1)));
+    m(i) = m(i-1)+(stepsize*((am*(1-m(i-1)))-(bm*m(i-1))));
+    n(i) = n(i-1)+(stepsize*((an*(1-n(i-1)))-(bn*n(i-1))));
+    h(i) = h(i-1)+(stepsize*((ah*(1-h(i-1)))-(bh*h(i-1))));
+    
+    am = 0.1*((25-Vm(i-1))/(exp((25-Vm(i-1))/10)-1));
+    bm = 4*exp(-1*Vm(i-1)/18);
+    an = 0.01*((10-Vm(i-1))/(exp((10-Vm(i-1))/10)-1));
+    bn = 0.125*exp(-1*Vm(i-1)/80);
+    ah = 0.07*exp(-1*Vm(i-1)/20);
+    bh = 1/(exp((30-Vm(i-1))/10)+1);
+    
     
     gNa(i) = ((m(i-1))^3)*gNacon*h(i-1);
     gK(i) = (n((i-1))^4)*gKcon;  
@@ -65,7 +77,8 @@ for i = 2:length(t)
        
 end
 
-Vmm = Vm+ones(1,length(t))*-70;
+Vmm = Vm + ones(1,length(t))*-70;
+
 figure
 plot(t,Vmm)
 figure
